@@ -1,0 +1,20 @@
+{
+  "name": "kevinclarkadstech-authorization",
+  "module": "src/index.ts",
+  "type": "module",
+  "scripts": {
+    "build": "bun build src/index.ts --outdir dist --target module",
+    "test": "bun test"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "prettier": "^3.5.3"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "ulid": "^3.0.0",
+    "zod": "^3.25.56"
+  }
+}
