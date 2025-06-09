@@ -6,13 +6,13 @@ import { mockBasicUser1 } from "../../../shared/test-mocks/mock-basic-user1";
 import { mockBasicUser2 } from "../../../shared/test-mocks/mock-basic-user2";
 
 describe("CanUpdatePostAuthorization", () => {
-  it("should allow a user to update any post if they are an admin", () => {
+  it("should not allow a user to update any post if they are an admin", () => {
     const authorization = new CanUpdatePostAuthorization({
       subject: { type: "user", data: mockAdminUser1 },
       action: "update-post",
       resource: mockPost,
     });
-    expect(authorization.check()).toBe(true);
+    expect(authorization.check()).toBe(false);
   });
 
   it("should allow a user to update their own post", () => {

@@ -1,8 +1,8 @@
-import { Authorization } from "..";
+import { ChainingAuthorization } from "..";
 import type { Post } from "../../../models/post";
 import type { Subjects } from "../../../shared/types/subjects";
 
-export class CanUpdatePostAuthorization extends Authorization<{
+export class CanUpdatePostAuthorization extends ChainingAuthorization<{
   subject: Subjects | null;
   action: "update-post";
   resource: Post;
@@ -12,7 +12,7 @@ export class CanUpdatePostAuthorization extends Authorization<{
     if (!this.subject) return false;
     if (this.subject.type === "user") {
       const user = this.subject.data;
-      // Users can update a post if they are the creator
+      // Only creators can update their posts
       const isPostCreator = post.createdBy === user.id;
       return isPostCreator;
     }

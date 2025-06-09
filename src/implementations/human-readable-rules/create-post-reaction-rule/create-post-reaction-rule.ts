@@ -9,7 +9,7 @@ export type CreatePostReactionRuleConfig = {
   withResourceAndContext: {
     resource: PostReaction;
     additionalContext: {
-      post: Post;
+      post: Post | null;
     };
   };
 };
@@ -23,17 +23,14 @@ export const createPostReactionRule: Rule<CreatePostReactionRuleConfig> = {
     }
 
     if (givenASubject.type === "user") {
-      const userIsNotPostCreator =
-        withResourceAndContext.additionalContext.post.createdBy !==
-        givenASubject.data.id;
+      const user = givenASubject.data;
+      const post = withResourceAndContext.additionalContext.post;
+
+      const userIsNotPostCreator = post.createdBy !== user.id;
       const userIsNotBlockingPostCreator =
-        !givenASubject.data.blockList.blocking[
-          withResourceAndContext.additionalContext.post.createdBy
-        ];
+        !user.blockList.blocking[post.createdBy];
       const userIsNotBlockedByPostCreator =
-        !givenASubject.data.blockList.blockedBy[
-          withResourceAndContext.additionalContext.post.createdBy
-        ];
+        !user.blockList.blockedBy[post.createdBy];
       return (
         userIsNotPostCreator &&
         userIsNotBlockedByPostCreator &&

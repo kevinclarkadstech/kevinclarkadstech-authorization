@@ -1,7 +1,7 @@
-import type { Post } from "../../models/post";
-import type { PostReaction } from "../../models/post-reaction";
-import type { Subjects } from "../../shared/types/subjects";
 import { Authorization } from "..";
+import type { Post } from "../../../models/post";
+import type { PostReaction } from "../../../models/post-reaction";
+import type { Subjects } from "../../../shared/types/subjects";
 
 export class CanCreatePostReactionAuthorization extends Authorization<{
   subject: Subjects | null;
@@ -10,18 +10,17 @@ export class CanCreatePostReactionAuthorization extends Authorization<{
   additionalContext: { post: Post };
 }> {
   public check(): boolean {
-    if (!this.subject || !this.additionalContext?.post) return false;
+    const post = this.additionalContext?.post;
+
+    if (!this.subject || !post) return false;
     if (this.subject.type === "user") {
-      const userIsNotPostCreator =
-        this.additionalContext.post.createdBy !== this.subject.data.id;
+      const user = this.subject.data;
+
+      const userIsNotPostCreator = post.createdBy !== user.id;
       const userIsNotBlockingPostCreator =
-        !this.subject.data.blockList.blocking[
-          this.additionalContext.post.createdBy
-        ];
+        !user.blockList.blocking[post.createdBy];
       const userIsNotBlockedByPostCreator =
-        !this.subject.data.blockList.blockedBy[
-          this.additionalContext.post.createdBy
-        ];
+        !user.blockList.blockedBy[post.createdBy];
       return (
         userIsNotPostCreator &&
         userIsNotBlockedByPostCreator &&

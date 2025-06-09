@@ -1,6 +1,6 @@
-import type { Post } from "../../models/post";
-import type { Subjects } from "../../shared/types/subjects";
 import { Authorization } from "..";
+import type { Post } from "../../../models/post";
+import type { Subjects } from "../../../shared/types/subjects";
 
 export class CanCreatePostAuthorization extends Authorization<{
   subject: Subjects | null;
@@ -8,6 +8,11 @@ export class CanCreatePostAuthorization extends Authorization<{
   resource: Post;
 }> {
   public check(): boolean {
-    return this.subject !== null;
+    if (!this.subject) return false;
+    if (this.subject.type === "user") {
+      return true; // Users can create posts
+    }
+
+    return false;
   }
 }

@@ -15,17 +15,18 @@ export type UpdatePostStatusRuleConfig = {
 
 export const updatePostStatusRule: Rule<UpdatePostStatusRuleConfig> = {
   evaluate: ({ givenASubject, withResourceAndContext }) => {
+    // The post status can be updated by the post creator or an admin, only if the status is actually changing
+    // and the post exists in the additional context
     if (!givenASubject || !withResourceAndContext.additionalContext.post)
       return false;
     if (givenASubject.type === "user") {
-      // Assuming users can update the status of a post if they are the creator
-      const userIsPostCreator =
-        givenASubject.data.id ===
-        withResourceAndContext.additionalContext.post.createdBy;
-      const userIsAdmin = givenASubject.data.roles.includes("admin");
-      const postStatusIsChanged =
-        withResourceAndContext.resource !==
-        withResourceAndContext.additionalContext.post.status;
+      const user = givenASubject.data;
+      const originalPost = withResourceAndContext.additionalContext.post;
+      const newPostStatus = withResourceAndContext.resource;
+
+      const userIsPostCreator = user.id === originalPost.createdBy;
+      const userIsAdmin = user.roles.includes("admin");
+      const postStatusIsChanged = newPostStatus !== originalPost.status;
 
       return (userIsAdmin || userIsPostCreator) && postStatusIsChanged;
     }

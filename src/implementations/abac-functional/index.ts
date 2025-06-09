@@ -1,30 +1,25 @@
-export function withSubject<Subject extends Record<string, any> | null>(
-  subject: Subject
-): Subject {
-  return subject;
-}
+/*
+  This is similar to the CanFn type, but it uses different types to potentially make it more readable, depending on preference.
+*/
 
-export function withAction<Action extends string>(action: Action): Action {
-  return action;
-}
+export type WithSubject<Subject extends Record<string, any> | null> = Subject;
 
-export function withResource<Resource extends Record<string, any>>(
-  resource: Resource
-): Resource {
-  return resource;
-}
+export type WithAction<Action extends string> = Action;
 
-export function withAdditionalContext<
+export type WithResource<Resource extends Record<string, any>> = Resource;
+
+export type WithAdditionalContext<
   AdditionalContext extends Record<string, any> | undefined,
->(additionalContext?: AdditionalContext): AdditionalContext | undefined {
-  return additionalContext;
-}
+> = AdditionalContext | undefined;
 
 export type EvaluateAbacFn<
-  Input extends {
-    subject: Record<string, any> | null;
-    action: string;
-    resource: Record<string, any>;
-    additionalContext?: Record<string, any>;
-  },
-> = (input: Input) => boolean;
+  Subject extends WithSubject<any>,
+  Action extends WithAction<any>,
+  Resource extends WithResource<any>,
+  AdditionalContext extends WithAdditionalContext<any> = undefined,
+> = (input: {
+  subject: Subject;
+  action: Action;
+  resource: Resource;
+  additionalContext?: AdditionalContext;
+}) => boolean;

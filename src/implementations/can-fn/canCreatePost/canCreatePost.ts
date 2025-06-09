@@ -7,5 +7,10 @@ export const canCreatePost: CanFn<{
   resource: Post;
   action: "create-post";
 }> = ({ subject }) => {
-  return subject !== null;
+  if (!subject) return false;
+  if (subject.type === "user") {
+    return true;
+  }
+
+  return false;
 };

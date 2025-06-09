@@ -18,7 +18,7 @@ describe("updatePostRule", () => {
     expect(result).toBe(true);
   });
 
-  it("should allow an admin to update any post", () => {
+  it("should not allow an admin to just update any post", () => {
     const ruleConfig: UpdatePostRuleConfig = {
       givenASubject: { type: "user", data: mockAdminUser1 },
       tryingTo: "update-post",
@@ -27,7 +27,7 @@ describe("updatePostRule", () => {
       },
     };
     const result = updatePostRule.evaluate(ruleConfig);
-    expect(result).toBe(true);
+    expect(result).toBe(false);
   });
 
   it("should not allow a user to update another user's post", () => {

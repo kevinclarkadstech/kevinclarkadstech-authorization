@@ -19,8 +19,10 @@ export const updatePostRule: Rule<UpdatePostRuleConfig> = {
     }
 
     if (givenASubject.type === "user") {
-      const userIsPostCreator =
-        withResourceAndContext.resource.createdBy === givenASubject.data.id;
+      const user = givenASubject.data;
+      const post = withResourceAndContext.resource;
+
+      const userIsPostCreator = post.createdBy === user.id;
       return userIsPostCreator;
     }
     return false; // For other types of subjects, one can define additional logic later

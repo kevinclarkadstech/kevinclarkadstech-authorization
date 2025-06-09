@@ -9,14 +9,16 @@ export const canCreatePostReaction: CanFn<{
   action: "create-post-reaction";
   additionalContext: { post: Post };
 }> = ({ subject, additionalContext }) => {
-  if (!subject || !additionalContext?.post) return false;
+  const post = additionalContext?.post;
+  if (!subject || !post) return false;
   if (subject.type === "user") {
-    const userIsNotPostCreator =
-      additionalContext.post.createdBy !== subject.data.id;
+    const user = subject.data;
+
+    const userIsNotPostCreator = post.createdBy !== user.id;
     const userIsNotBlockingPostCreator =
-      !subject.data.blockList.blocking[additionalContext.post.createdBy];
+      !user.blockList.blocking[post.createdBy];
     const userIsNotBlockedByPostCreator =
-      !subject.data.blockList.blockedBy[additionalContext.post.createdBy];
+      !user.blockList.blockedBy[post.createdBy];
     return (
       userIsNotPostCreator &&
       userIsNotBlockedByPostCreator &&

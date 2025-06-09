@@ -9,9 +9,13 @@ export const canUpdatePost: CanFn<{
 }> = ({ subject, resource }) => {
   if (!subject || !resource) return false;
   if (subject.type === "user") {
+    // For readability
+    const user = subject.data;
+    const post = resource;
+
     // Check if the user is the creator of the post
-    const isPostCreator = resource.createdBy === subject.data.id;
-    const isAdmin = subject.data.roles.includes("admin"); // Assuming 'admin' is a valid role in your system
+    const isPostCreator = post.createdBy === user.id;
+    const isAdmin = user.roles.includes("admin"); // Assuming 'admin' is a valid role in your system
     // could also be a priv like can-update-any-post
     return isPostCreator || isAdmin;
   }

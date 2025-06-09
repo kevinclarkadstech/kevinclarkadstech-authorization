@@ -52,6 +52,10 @@ export type CreatePostRuleConfig = {
 export const createPostRule: Rule<CreatePostRuleConfig> = {
   evaluate: function ({ givenASubject }) {
     // The rule for creating a post is only that the subject must be authenticated
-    return givenASubject !== null;
+    if (givenASubject?.type === "user") {
+      return true;
+    }
+
+    return false;
   },
 };

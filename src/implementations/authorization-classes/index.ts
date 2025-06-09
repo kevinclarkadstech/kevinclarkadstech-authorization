@@ -1,3 +1,8 @@
+/*
+  This requires creating an instance of the class rather than a static method or singleton.
+
+*/
+
 export abstract class Authorization<
   Input extends {
     subject: { type: string; data: any } | null;
