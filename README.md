@@ -15,6 +15,7 @@ Some benefits
 1. Any characteristic of the Subject can be used in the evaluation, "role", "privilege", or a property on the subject like "isAdmin". This is more powerful than simply Role or Privilege based authorization.
 2. Pure functions are great for authorization because of their predictability. Also separating the side effects like data fetching makes them easier to write and read.
 3. They can be used isomorphically, i.e in a web app, React Native app, a Node.js app, or a Bun app like this one. This means you could have a shared library of models and logic so no writing logic twice!
+4. Works REALLY well with AI assistance, so unit tests almost write themselves = QUICK delivery!
 
 Some cons:
 
